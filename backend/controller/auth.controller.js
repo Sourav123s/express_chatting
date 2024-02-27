@@ -40,7 +40,7 @@ async function login(req, res) {
   } catch (error) {
     console.log(error);
     return res.json({
-      message: "Something went wrong!",
+      error: "Something went wrong!",
       statusCode: 500,
     });
   }
@@ -116,7 +116,7 @@ async function logout(req, res) {
     });
   } catch (error) {
     return res.json({
-      message: "Something went wrong!",
+      error: "Something went wrong!",
       statusCode: 500,
     });
   }

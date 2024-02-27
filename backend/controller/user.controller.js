@@ -18,7 +18,7 @@ async function getUser(req, res) {
   } catch (error) {
     console.log("Error get user:", error);
     return res.json({
-      message: "Something went wrong!",
+      error: "Something went wrong!",
       statusCode: 500,
     });
   }

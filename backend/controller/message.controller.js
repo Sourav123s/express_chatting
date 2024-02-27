@@ -40,7 +40,7 @@ async function sendMessage(req, res) {
   } catch (error) {
     console.log("Error sending message:", error);
     return res.json({
-      message: "Something went wrong!",
+      error: "Something went wrong!",
       statusCode: 500,
     });
   }
@@ -71,7 +71,7 @@ async function getMessage(req, res) {
   } catch (error) {
     console.log("Error get message:", error);
     return res.json({
-      message: "Something went wrong!",
+      error: "Something went wrong!",
       statusCode: 500,
     });
   }
