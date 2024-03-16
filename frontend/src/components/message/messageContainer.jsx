@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Messages from './messages'
 import MessageInput from './messageInput'
 import { TiMessages } from 'react-icons/ti'
+import useCoversations from '../../zustand/useConversation'
 const MessageContainer = () => {
-    const noChatSelected = true
+    const { selectedConversation, setSelectedConversation, messages, setMessages } = useCoversations();
+
+    useEffect(() => {
+
+        //cleanup function (unmounted)
+        return () => setSelectedConversation(null);
+
+    }, [setSelectedConversation]);
+
     return (
         <div className="md:min-w-[450px] flex flex-col">
-            {noChatSelected ? (
+            {!selectedConversation ? (
                 <NoChatSelected />
             ) : (<>
                 <div className="bg-slate-500 px-4 py-2 mb-2 ">
@@ -14,7 +23,7 @@ const MessageContainer = () => {
                         <img alt="user impage" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" className='rounded-full' />
                     </div> */}
                     <span className="label-text">To: </span>
-                    <span className="text-gray-900 font-bold">John Doe</span>
+                    <span className="text-gray-900 font-bold">{selectedConversation.fullName}</span>
                 </div>
                 <Messages />
                 <MessageInput />

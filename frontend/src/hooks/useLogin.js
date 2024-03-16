@@ -19,28 +19,31 @@ const useLogin = () => {
       const data = await res.json();
 
       if (data.statusCode === 200) {
+        /**
+         * SET THE LOCALSTORAGE
+         */
+        localStorage.setItem("authUser", JSON.stringify(data.result));
+        /**
+         * UPDATE THE THE authContext value
+         */
+        setAuthUser(data.result);
+
         toast.success(data.message);
       } else if (data.error) {
         throw new Error(data.error);
+      } else {
+        toast.error(data.message);
       }
-      /**
-       * SET THE LOCALSTORAGE
-       */
-      localStorage.setItem("authUser", JSON.stringify(data.result));
-      /**
-       * UPDATE THE THE authContext value
-       */
-      setAuthUser(data.result);
-      setLoading(false);
     } catch (error) {
       toast.error(error);
       return;
+    } finally {
+      setLoading(false);
     }
   }
   return { loading, login };
 };
 function handelInputError(userName, password) {
-  console.log(userName, password);
   if (!userName || !password) {
     toast.error("Please fill all the fields!");
     return false;

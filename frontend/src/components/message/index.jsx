@@ -1,16 +1,24 @@
 import React from 'react'
-
-const Message = () => {
+import { useAuthContext } from '../../context/authContext.jsx'
+import useCoversations from '../../zustand/useConversation';
+import { extractTime } from '../../utils/extractTime.js';
+const Message = ({ message }) => {
+    const { authUser } = useAuthContext();
+    const { selectedConversation } = useCoversations();
+    const fromMe = message.senderId == authUser._id
+    const chatClassName = fromMe ? 'chat-end' : 'chat-start';
+    const profilePic = fromMe ? authUser?.profilePicture : selectedConversation?.profilePicture; //
+    const bubbleBgColor = fromMe ? 'bg-blue-500' : 'bg-gray-700'
     return (
-        <div className="chat chat-end">
+        <div className={`chat ${chatClassName}`}>
             <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
-                    <img alt="user impage" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                    <img alt="user impage" src={profilePic} />
                 </div>
             </div>
-            <div className="chat-bubble text-white bg-blue-400">I hate you!</div>
+            <div className={`chat-bubble text-white bg-blue-400 ${bubbleBgColor} pb-2`}>{message.message}</div>
             <div className="chat-footer opacity-50 text-xs flex gap-1 items-center text-blue-50">
-                Seen at 12:46
+                {extractTime(message.createdAt)}
             </div>
         </div>
     )
