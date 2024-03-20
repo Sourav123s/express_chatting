@@ -8,7 +8,7 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
     //get the context for the online users
     const { onlineUsers } = useSocketContext();
     // check the current user is online
-    const isOnline = onlineUsers.includes(conversation._id)
+    const isOnline = onlineUsers?.includes(conversation._id)
     return (
         <>
             <div className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer 
