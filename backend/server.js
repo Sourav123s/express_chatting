@@ -7,7 +7,7 @@ const morgan = require("morgan");
 const { connectToMongoDB } = require("./db/connectToMongoDB");
 
 const PORT = process.env.PORT || 3000;
-const app = express();
+const { app, server } = require("./socket/socket.js");
 
 const authRoutes = require("./routes/auth.route.js");
 const messageRoutes = require("./routes/message.route.js");
@@ -24,7 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/user", userRoutes);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectToMongoDB();
   console.log(`server listening on ${PORT}`);
 });

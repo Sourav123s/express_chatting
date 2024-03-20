@@ -2,14 +2,13 @@ import React, { useEffect, useRef } from 'react'
 import Message from './index.jsx'
 import useGetMessages from '../../hooks/useGetMessages.js'
 import MessageSkeleton from '../skeletons/messageSkeleton.jsx'
+import useListenMessages from '../../hooks/useListenMessages.js'
 const Messages = () => {
     const { messages, loading } = useGetMessages();
     const lastMessageRef = useRef();
-
+    useListenMessages(); // this custome hooks are used to load new messages
     useEffect(() => {
-        console.log("reg outside ", lastMessageRef)
         setTimeout(() => {
-            console.log("reg inside ", lastMessageRef)
             lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
         }, 100)
 

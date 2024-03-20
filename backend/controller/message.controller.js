@@ -1,28 +1,29 @@
 const Message = require("../models/message.model.js");
 const Conversation = require("../models/conversation.model.js");
+const { getReceiverSocketId, io } = require("../socket/socket.js");
 
 async function sendMessage(req, res) {
   try {
-    const { id: reciverId } = req.params;
+    const { id: receiverId } = req.params;
     const { message } = req.body;
     const senderId = req.user._id;
 
     // first try find if there any conversation between them
     let conversation = await Conversation.findOne({
       participants: {
-        $all: [senderId, reciverId],
+        $all: [senderId, receiverId],
       },
     });
     // if there no conversation found
     if (!conversation) {
       //create a new conversation
       conversation = await Conversation.create({
-        participants: [senderId, reciverId],
+        participants: [senderId, receiverId],
       });
     }
     const newMessage = await Message.create({
       senderId,
-      reciverId,
+      receiverId,
       message,
     });
 
@@ -32,6 +33,14 @@ async function sendMessage(req, res) {
     }
 
     await Promise.all([conversation.save(), newMessage.save()]);
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    //Here we connet the socket for getting new messages
+    if (receiverSocketId) {
+      // io.to(<socket.io>).emit() used to send events to specific clients
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
     return res.json({
       result: newMessage,
       message: "Message send successful",
